@@ -16,6 +16,13 @@ public class Spawner : MonoBehaviour
     {
         StartCoroutine(SpawnOpponents());
     }
+    public Vector3 RandomSpawnPoint()
+    {
+        int randomIndex = Random.Range(0, _spawnPoints.Length);
+        Transform spawnPoint = _spawnPoints[randomIndex];
+
+        return spawnPoint.position;
+    }
 
     private IEnumerator SpawnOpponents()
     {
@@ -32,13 +39,5 @@ public class Spawner : MonoBehaviour
     {
         Opponent newOpponent = Instantiate(_opponentPrefab, RandomSpawnPoint(), Quaternion.identity);
         newOpponent.SetDirection(_direction);
-    }
-
-    public Vector3 RandomSpawnPoint()
-    {
-        int randomIndex = Random.Range(0, _spawnPoints.Length);
-        Transform spawnPoint = _spawnPoints[randomIndex];
-
-        return spawnPoint.position;
     }
 }
