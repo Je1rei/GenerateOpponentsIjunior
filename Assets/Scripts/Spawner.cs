@@ -1,37 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private SpawnPoints _spawnPoints;
-    [SerializeField] private GameObject _opponent;
+    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Opponent _opponentPrefab;
+    [SerializeField] private Vector3 _direction;
 
     [SerializeField] private float _delay;
-    [SerializeField] private int _start;
+    [SerializeField] private int _countSpawn;
 
     private void Start()
     {
-        StartCoroutine(SpawnOpponent());
+        StartCoroutine(SpawnOpponents());
     }
 
-    private IEnumerator SpawnOpponent()
+    private IEnumerator SpawnOpponents()
     {
         var wait = new WaitForSeconds(_delay);
 
-        for(int i = 0; i < _start; i--)
+        for(int i = 0; i < _countSpawn; i++)
         {
             Spawn();
             yield return wait;
-            Debug.Log("Заспавнен противник" );
         }
     }
 
     private void Spawn()
     {
-        Instantiate(_opponent, _spawnPoints.RandomSpawnPoint(), Quaternion.identity);
+        Opponent newOpponent = Instantiate(_opponentPrefab, RandomSpawnPoint(), Quaternion.identity);
+        newOpponent.SetDirection(_direction);
     }
 
+    public Vector3 RandomSpawnPoint()
+    {
+        int randomIndex = Random.Range(0, _spawnPoints.Length);
+        Transform spawnPoint = _spawnPoints[randomIndex];
+
+        return spawnPoint.position;
+    }
 }

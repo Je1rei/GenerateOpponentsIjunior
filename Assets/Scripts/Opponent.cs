@@ -1,22 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Opponent : MonoBehaviour
 {
-    [SerializeField] private Transform _target;
     [SerializeField] private float _speed;
+    private Vector3 _direction;
+
+    public Vector3 Direction { get { return _direction; } private set {  _direction = value.normalized; } }
 
     private void FixedUpdate()
     {
         Move();
     }
 
-    private void Move()
+    public void SetDirection(Vector3 newDirection)
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
+        Direction = newDirection;
     }
 
+    public void Move()
+    {
+        transform.Translate(_direction * _speed  * Time.deltaTime);
+    }
 }
